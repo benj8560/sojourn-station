@@ -203,7 +203,7 @@
 		if(M.loc == loc)
 			process_heat(M)
 		for (var/atom/movable/G in src.loc)
-			G.clean_blood(TRUE)
+			G.clean_blood()
 
 		if(bless)
 			var/turf/T = get_turf(src)
