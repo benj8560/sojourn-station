@@ -84,7 +84,7 @@
 		wash(C)
 		check_heat(C)
 	for (var/atom/movable/G in src.loc)
-		G.clean_blood()
+		G.clean_blood(TRUE)
 
 /obj/effect/shower/Destroy()
 	mymist = null
@@ -224,4 +224,4 @@
 			C.adjustFireLoss(5)
 			to_chat(C, SPAN_DANGER("The water is searing!"))
 			return
-//cyka blyat
+//cyka blyat//cyka blyat
