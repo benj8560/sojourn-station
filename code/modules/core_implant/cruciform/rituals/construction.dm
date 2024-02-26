@@ -14,10 +14,11 @@ GLOBAL_LIST_INIT(nt_blueprints, init_nt_blueprints())
 			continue
 		if(blueprint_type == /datum/nt_blueprint/cruciform_upgrade)
 			continue
+		/* - Removed do to exploits with uprooting after autolathen printing giving full prices
 		if(blueprint_type == /datum/nt_blueprint/weapons)
 			continue
 		if(blueprint_type == /datum/nt_blueprint/health_care)
-			continue
+			continue*/
 		var/datum/nt_blueprint/pb = new blueprint_type()
 		list[pb.name] = pb
 	. = list
@@ -49,6 +50,7 @@ GLOBAL_LIST_INIT(nt_constructs, init_nt_constructs())
 			continue
 		listed_components += list("[blueprint.materials[placeholder]] [initial(placeholder.name)]")
 	to_chat(user, SPAN_NOTICE("[blueprint.name] requires: [english_list(listed_components)]."))
+	return TRUE
 
 /datum/ritual/cruciform/priest/construction
 	name = "Manifestation"
@@ -117,6 +119,7 @@ GLOBAL_LIST_INIT(nt_constructs, init_nt_constructs())
 	user.visible_message(SPAN_NOTICE("You hear a soft humming sound as [user] finishes his ritual."),SPAN_NOTICE("You take a deep breath as the divine manifestation finishes."))
 	var/build_path = blueprint.build_path
 	new build_path(target_turf)
+	return TRUE
 
 /datum/ritual/cruciform/priest/construction/proc/items_check(mob/user,turf/target, datum/nt_blueprint/blueprint)
 	var/list/turf_contents = target.contents
@@ -188,6 +191,7 @@ GLOBAL_LIST_INIT(nt_constructs, init_nt_constructs())
 	user.visible_message(SPAN_NOTICE("Clanking of parts hit the floor as [user] finishes their prayer and the machine falls apart."),SPAN_NOTICE("Collect the evidence, and begin to atone."))
 
 	qdel(reclaimed)
+	return TRUE
 
 /datum/nt_blueprint/
 	var/name = "Report me"
@@ -590,7 +594,7 @@ GLOBAL_LIST_INIT(nt_constructs, init_nt_constructs())
 		/obj/item/stack/material/plasteel = 40,
 		/obj/item/stack/material/wood = 25,
 		/obj/item/stack/material/glass = 15,
-		/obj/item/stack/material/gold = 3,
+		/obj/item/stack/material/gold = 5,
 		/obj/item/stack/material/silver = 5
 	)
 	build_time = 8 SECONDS
@@ -604,7 +608,7 @@ GLOBAL_LIST_INIT(nt_constructs, init_nt_constructs())
 	name = "Absolutism Medkit"
 	build_path = /obj/item/storage/firstaid/nt
 	materials = list(
-		/obj/item/stack/material/biomatter = 105,
+		/obj/item/stack/material/biomatter = 45,
 		/obj/item/stack/material/plastic = 4,
 		/obj/item/stack/material/glass = 2,
 		/obj/item/stack/material/gold = 2,
