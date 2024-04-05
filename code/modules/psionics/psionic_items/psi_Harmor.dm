@@ -56,9 +56,8 @@
 	icon = 'icons/obj/psionic/occHicon.dmi'
 	icon_override = 'icons/obj/psionic/occHmob.dmi'
 	desc = "This is a massive helmet with a large and durable visor, looking through which you see the world through the veil of nothingness itself. You are detached from reality and it cannot harm you. You control reality, it doesn't control you. \
-	This is a very good defense, but maintaining it requires constant concentration."
+	This is a very good defense, but maintaining it requires constant concentration. It's massive visor serves as a more powerful Witchlight."
 	slot_flags = SLOT_HEAD
-	item_flags = STOPPRESSUREDAMAGE|THICKMATERIAL|AIRTIGHT|COVER_PREVENT_MANIPULATION|BLOCK_GAS_SMOKE_EFFECT
 	matter = list()
 	armor_list = list(
 		melee = 60,
@@ -70,7 +69,7 @@
 	)
 	siemens_coefficient = 0.4
 	light_color = "#5B0E4F"
-	brightness_on = 8
+	brightness_on = 10
 	on = 0
 	light_applied = 0
 	var/mob/living/carbon/human/occultist
@@ -78,7 +77,7 @@
 	var/pointremoved = 0 //Did we take you your cog?
 
 	action_button_name = "Toggle Witchlight" //reflavor this so I can make it purple to go in line with the guns - Sigma
-	light_overlay = "helmet_light" //Sadly this has to go in icons/obj/light_overlays because I can't figure out how to point it to a different one.
+	light_overlay = "helmet_heavy_occult" //Sadly this has to go in icons/obj/light_overlays because I can't figure out how to point it to a different one.
 										  //Currently it's located in the icons/obj/light_overlays folder, proc is at /obj/item/clothing/head/on_update_icon(mob/user) -Sigma
 
 /obj/item/clothing/head/helmet/space/occultHhood/dropped()
@@ -105,7 +104,6 @@
 	icon_state = "gloves"
 	icon_override = 'icons/obj/psionic/occHmob.dmi'
 	slot_flags = SLOT_GLOVES
-	item_flags = THICKMATERIAL
 	siemens_coefficient = 0 //Insulated!
 	matter = list()
 	armor_list = list(
