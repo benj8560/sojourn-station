@@ -49,7 +49,7 @@
 		rad = 0
 	)
 
-/obj/item/clothing/head/armor/helmet/tanker/verb/toggle_style()
+/obj/item/clothing/head/helmet/tanker/verb/toggle_style()
 	set name = "Adjust Style"
 	set category = "Object"
 	set src in usr
@@ -1235,6 +1235,7 @@
 	icon_state = "ablative"
 	armor_list = list(melee = 30, bullet = 30, energy = 75, bomb = 50, bio = 10, rad = 0)
 	flags_inv = HIDEEARS|HIDEEYES
+	body_parts_covered = HEAD|EYES|EARS
 	cold_protection = HEAD
 	min_cold_protection_temperature = SPACE_HELMET_MIN_COLD_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.5
@@ -1371,8 +1372,8 @@
 	desc = "A bulletproof security helmet that excels in protecting the wearer against traditional projectile weaponry and explosives to a minor extent. \
 			Comes with inbuilt nightvision HUD."
 	icon_state = "bulletproof_ironhammer"
-	body_parts_covered = HEAD | EARS
-	flags_inv = NONE
+	body_parts_covered = HEAD|FACE|EARS
+	flags_inv = HIDEEARS
 	action_button_name = "Toggle Night Vision"
 	var/obj/item/clothing/glasses/powered/nightvision_helmet/hud
 	var/last_toggle = 0
@@ -1803,7 +1804,11 @@
 					continue
 				crewmembers_recently_reported += entry["name"]
 				schedule_memory_cleanup(entry["name"])
-				to_chat(user, SPAN_WARNING("[src] beeps: '[entry["name"]]'s on-suit sensors broadcast an emergency signal. Access monitoring software for details.'"))
+				if((entry["area"]))
+					to_chat(user, SPAN_WARNING("[src] beeps: '[entry["name"]]'s on-suit sensors broadcast an emergency signal from [entry["area"]]. Access monitoring software for details.'"))
+				else
+					to_chat(user, SPAN_WARNING("[src] beeps: '[entry["name"]]'s on-suit sensors broadcast an emergency signal from an unidentified location. Access monitoring software for details.'"))
+
 
 	schedule_scan()
 

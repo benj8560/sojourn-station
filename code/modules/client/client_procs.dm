@@ -86,6 +86,9 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 		cmd_admin_irc_pm(href_list["irc_msg"])
 		return
 
+	if(href_list["commandbar_typing"])
+		handle_commandbar_typing(href_list)
+
 	switch(href_list["_src_"])
 		if("holder")
 			hsrc = holder
@@ -202,6 +205,8 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 
 	// Instantiate ~~tgui~~ goonchat panel
 	// tgui_panel = new(src)
+	tgui_say = new(src, "tgui_say")
+	initialize_commandbar_spy()
 	chatOutput = new /datum/chatOutput(src)
 
 	var/connecting_admin = FALSE //because de-admined admins connecting should be treated like admins.
@@ -234,7 +239,8 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 		SScharacter_setup.preferences_datums[ckey] = prefs
 	prefs.last_ip = address				//these are gonna be used for banning
 	prefs.last_id = computer_id			//these are gonna be used for banning
-	fps = 40 //(prefs.clientfps < 0) ? RECOMMENDED_FPS /* <- recommended is 40 */: prefs.clientfps
+	// Will be default if join during setup, will just be correct otherwise
+	fps = prefs.clientfps
 
 	var/full_version = "[byond_version].[byond_build ? byond_build : "xxx"]"
 	log_access("Login: [key_name(src)] from [address ? address : "localhost"]-[computer_id] || BYOND v[full_version]")
@@ -246,15 +252,22 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 
 	to_chat(src, "\red If the title screen is black, resources are still downloading. Please be patient until the title screen appears.")
 
-
+	// Try doing this before mob login
+	apply_clickcatcher()
 
 	. = ..() //calls mob.Login()
+	++global.client_count
 	if (byond_version >= 512)
 		if (!byond_build || byond_build < 1386)
 			message_admins(span_adminnotice("[key_name(src)] has been detected as spoofing their byond version. Connection rejected."))
 			// add_system_note("Spoofed-Byond-Version", "Detected as using a spoofed byond version.")
 			// log_suspicious_login("Failed Login: [key] - Spoofed byond version")
 			qdel(src)
+
+		// TODO: Remove when 515 is stable
+		if (byond_version >= 515)
+			to_chat(src, span_userdanger("WARNING: This server does not support BYOND versions above 514.1589, but you are running [byond_version].[byond_build]! This is known to cause issues such as UI windows not working!"))
+			to_chat(src, span_danger("Please downgrade to <a href=\"https://secure.byond.com/download/build/514\">BYOND 514.1589</a> or earlier."))
 
 		if (num2text(byond_build) in GLOB.blacklisted_builds)
 			log_access("Failed login: [key] - blacklisted byond version")
@@ -271,6 +284,7 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 	// src << browse(file('html/statbrowser.html'), "window=statbrowser")
 	// addtimer(CALLBACK(src, .proc/check_panel_loaded), 30 SECONDS)
 	// tgui_panel.initialize()
+	tgui_say.initialize()
 	// Starts the chat
 	chatOutput.start()
 
@@ -330,7 +344,8 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 /client/Del()
 	if(!gc_destroyed)
 		Destroy() //Clean up signals and timers.
-	return ..()
+	. = ..()
+	--global.client_count
 
 /client/Destroy()
 	clients -= src
@@ -763,4 +778,14 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 //En-abled by SoJ
 /client/proc/apply_fps(var/client_fps)
 	if(world.byond_version >= 511 && byond_version >= 511 && client_fps >= CLIENT_MIN_FPS && client_fps <= CLIENT_MAX_FPS)
-		vars["fps"] = prefs.clientfps
+		vars["fps"] = client_fps
+
+/client/proc/generate_clickcatcher()
+	if(!void)
+		void = new()
+		screen += void
+
+/client/proc/apply_clickcatcher()
+	generate_clickcatcher()
+	var/list/actualview = getviewsize(view)
+	void.UpdateGreed(actualview[1],actualview[2])

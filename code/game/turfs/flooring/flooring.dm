@@ -124,12 +124,54 @@ var/list/flooring_types
 /decl/flooring/proc/Entered(mob/living/M as mob)
 	return
 
+//=======OPEN GROUND========\\
+
 /decl/flooring/asteroid
 	name = "coarse sand"
 	desc = "Gritty and unpleasant."
 	icon = 'icons/turf/flooring/asteroid.dmi'
 	icon_base = "asteroid"
 	flags = TURF_REMOVE_SHOVEL | TURF_CAN_BURN | TURF_CAN_BREAK
+	build_type = null
+	footstep_sound = "asteroid"
+
+/decl/flooring/shale
+	name = "coarse shale"
+	desc = "Dark toned basaltic dust."
+	icon = 'icons/turf/flooring/dirt.dmi'
+	icon_base = "shale"
+	has_base_range = 3
+	damage_temperature = T0C+120
+	flags = TURF_REMOVE_SHOVEL | TURF_EDGES_EXTERNAL | TURF_HAS_CORNERS
+	build_type = null
+	footstep_sound = "asteroid"
+	floor_smooth = SMOOTH_NONE
+	space_smooth = SMOOTH_NONE
+
+/decl/flooring/shale/rock
+	name = "coarse shale"
+	desc = "Dark toned basaltic dust."
+	icon = 'icons/turf/flooring/dirt.dmi'
+	icon_base = "shale_alt"
+	flags = TURF_REMOVE_SHOVEL | TURF_CAN_BURN
+	build_type = null
+	footstep_sound = "asteroid"
+
+/decl/flooring/shale/dark
+	name = "coarse shale"
+	desc = "Does this dry world weep with sand..?"
+	icon = 'icons/turf/flooring/dirt.dmi'
+	icon_base = "shale_dark"
+	flags = TURF_REMOVE_SHOVEL | TURF_CAN_BURN
+	build_type = null
+	footstep_sound = "asteroid"
+
+/decl/flooring/shale/windswept
+	name = "coarse shale"
+	desc = "Piles upon piles of windswept ashes."
+	icon = 'icons/turf/flooring/dirt.dmi'
+	icon_base = "shale_dark"
+	flags = TURF_REMOVE_SHOVEL | TURF_CAN_BURN
 	build_type = null
 	footstep_sound = "asteroid"
 
@@ -235,11 +277,12 @@ var/list/flooring_types
 	if(MOVING_QUICKLY(M))
 		if(M.stats.getPerk(PERK_SURE_STEP))
 			return
+		var/task_level = our_trippah.learnt_tasks.get_task_mastery_level("SLIP_N_DIE")
  // The art of calculating the vectors required to avoid tripping on the metal beams requires big quantities of brain power
-		if(prob(50 - our_trippah.stats.getStat(STAT_COG))) //50 cog makes you unable to trip
+		if(prob(50 - (our_trippah.stats.getStat(STAT_COG)) + task_level)) //50 cog makes you unable to trip, or if you trip alot
 			if(!our_trippah.back)
-				to_chat(our_trippah, SPAN_WARNING("You would have tripped if you didn't balance."))
 				return
+			our_trippah.learnt_tasks.attempt_add_task_mastery(/datum/task_master/task/slip_n_die, "SLIP_N_DIE", skill_gained = 1, learner = our_trippah)
 			our_trippah.adjustBruteLoss(5)
 			our_trippah.trip(src, 6)
 			return
@@ -862,6 +905,33 @@ var/list/flooring_types
 
 /decl/flooring/grass2/colonialbeach/corner
 	icon_base = "gbcorner"
+
+/*Snow*/
+/decl/flooring/snow
+	name = "snow"
+	icon = 'icons/turf/flooring/snows.dmi'
+	icon_base = "snow"
+	has_base_range = 4
+	flags = TURF_REMOVE_SHOVEL | TURF_EDGES_EXTERNAL | TURF_HAS_CORNERS
+	plating_type = /decl/flooring/dirt
+	footstep_sound = "snow"
+	floor_smooth = SMOOTH_NONE
+	space_smooth = SMOOTH_NONE
+
+/*Ice Water*/
+/decl/flooring/icewater
+	name = "frozen water"
+	desc = "Frozen water, solid enough to stand on, looks too thick to dig through without machines."
+	icon = 'icons/turf/flooring/icewater.dmi'
+	icon_base = "ice_water"
+	has_base_range = 2
+	flags = TURF_EDGES_EXTERNAL | TURF_HAS_CORNERS
+	plating_type = /decl/flooring/dirt
+	footstep_sound = "ice"
+	floor_smooth = SMOOTH_NONE
+	space_smooth = SMOOTH_NONE
+	resistance = RESISTANCE_TOUGH
+	health = 9999999
 
 /*Dirt*/
 /decl/flooring/dirt

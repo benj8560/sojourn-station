@@ -9,7 +9,6 @@
 /datum/chemical_reaction/dylovene
 	result = "anti_toxin"
 	required_reagents = list("silicon" = 1, "potassium" = 1, "ammonia" = 1)
-	byproducts = list("sodiumchloride" = 0.1)
 	result_amount = 3
 
 /datum/chemical_reaction/carthatoline
@@ -117,6 +116,11 @@
 	required_reagents = list("bicaridine" = 2, "cronexidone" = 0.1)
 	catalysts = list("plasma" = 5)
 	result_amount = 2
+
+/datum/chemical_reaction/trypsin
+	result = "trypsin"
+	required_reagents = list("carbon" = 1, "sacid" = 1, "dermaline" = 1)
+	result_amount = 1
 
 /datum/chemical_reaction/leporazine
 	result = "leporazine"
@@ -966,6 +970,35 @@
 	required_reagents = list("vodka" = 10, "concentrated-carpotoxin" = 1)
 	result_amount = 10
 
+/datum/chemical_reaction/nutriment_1
+	result = "nutriment"
+	required_reagents = list("bicaridine" = 1, "monocaridine" = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/nutriment_2
+	result = "nutriment"
+	required_reagents = list("dexalin" = 1, "quintalin" = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/nutriment_3
+	result = "nutriment"
+	required_reagents = list("dexalinp" = 1, "quintalin" = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/nutriment_4
+	result = "nutriment"
+	required_reagents = list("moon water" = 1, "kelotane" = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/nutriment_5
+	result = "nutriment"
+	required_reagents = list("moon water" = 1, "dermaline" = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/nutriment_6
+	result = "nutriment"
+	required_reagents = list("anti_toxin" = 1, "lg_anti_toxin" = 1)
+	result_amount = 2
 
 /* FBP "medicine" */
 

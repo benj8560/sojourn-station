@@ -30,15 +30,32 @@
 /datum/reagent/organic/blood/touch_turf(turf/simulated/T)
 	if(!istype(T) || volume < 3)
 		return TRUE
-	if(!data["donor"] || istype(data["donor"], /mob/living/carbon/human))
+	var/datum/weakref/D = data["donor"]
+	if(!istype(D))
 		blood_splatter(T, src, 1)
-	else if(istype(data["donor"], /mob/living/carbon/alien))
+		return
+	
+	var/mob/living/something = D.resolve()
+	if(istype(something, /mob/living/carbon/human))
+		blood_splatter(T, src, 1)
+	else if(istype(something, /mob/living/carbon/alien))
 		var/obj/effect/decal/cleanable/blood/B = blood_splatter(T, src, 1)
 		if(B)
 			B.blood_DNA["UNKNOWN DNA STRUCTURE"] = "X*"
 	return TRUE
 
 /datum/reagent/organic/blood/affect_ingest(mob/living/carbon/M, alien, effect_multiplier)
+
+	if(VAMPIRE in M.mutations)
+		M.adjustNutrition(20) // For hunger
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			H.sanity.onNonAlcohol(src, effect_multiplier)
+			H.sanity.onAlcohol(src, effect_multiplier)
+			apply_sanity_effect(M, effect_multiplier)
+			LEGACY_SEND_SIGNAL(M, COMSIG_CARBON_HAPPY, src, ON_MOB_DRUG)
+
+		return //No other badness
 
 	var/effective_dose = dose
 	if(issmall(M)) effective_dose *= 2

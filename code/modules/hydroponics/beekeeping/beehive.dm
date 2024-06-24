@@ -155,9 +155,11 @@
 	var/trays = 0
 	for(var/obj/machinery/portable_atmospherics/hydroponics/H in view(7, src))
 		if(H.seed && !H.dead)
+			var/yield_o_seed = H.seed.get_trait(TRAIT_YIELD)
+			yield_o_seed *= 0.5 //Bees can only give us a 1.5 mult, but it scales with base mult
 			H.health += 0.05 * coef
-			if(H.yield_mod < 16) //15 is highest natural yield
-				H.yield_mod += 0.005 * coef
+			if(H.yield_mod < yield_o_seed)
+				H.yield_mod += 0.001 * coef
 			++trays
 			if(H.seed.seed_name in bee_food_list)
 				++foods
@@ -200,6 +202,7 @@
 		return
 	else if(istype(I, /obj/item/honey_frame))
 		var/obj/item/honey_frame/H = I
+		var/frame_return = H.framed
 		if(!H.honey)
 			to_chat(user, SPAN_NOTICE("\The [H] is empty, put it into a beehive."))
 			return
@@ -208,11 +211,13 @@
 		icon_state = "centrifuge_moving"
 		qdel(H)
 		spawn(spin_time)
-			new /obj/item/honey_frame(loc)
+			if(frame_return)
+				new /obj/item/honey_frame(loc)
 			new /obj/item/stack/wax(loc)
 			honey += processing
 			processing = 0
 			icon_state = "centrifuge"
+
 	else if(istype(I, /obj/item/reagent_containers/glass))
 		if(!honey)
 			to_chat(user, SPAN_NOTICE("There is no honey in \the [src]."))
@@ -239,6 +244,15 @@
 	w_class = ITEM_SIZE_SMALL
 
 	var/honey = 0
+	var/framed = TRUE
+
+/obj/item/honey_frame/frameless
+	name = "honeycomb"
+	desc = "Honeycombs filled with honey, requires processing to get the honey out."
+	icon_state = "honeycomb"
+	honey = 20
+	preloaded_reagents = list("honey" = 20, "woodpulp" = 10)
+	framed = FALSE //So we dont give a frame when processed
 
 /obj/item/honey_frame/filled
 	name = "filled beehive frame"

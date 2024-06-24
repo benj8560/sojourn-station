@@ -6,6 +6,7 @@
 /datum/perk/laststand
 	name = "Last Stand"
 	desc = "As a sablekyne your body is a tank, through will and biology you can ignore pain entirely for a short amount of time."
+	icon_state = "laststand"
 	active = FALSE
 	passivePerk = FALSE
 
@@ -32,7 +33,7 @@
 	desc = "All sablekyne are stocky and built wide, your brawny build and low center of gravity gives you exceptional balance. Few beasts can knock you down and not even the strongest men can push you over."
 	icon_state = "muscular" // https://game-icons.net
 
-/datum/perk/brawn/assign(mob/living/carbon/human/H)
+/datum/perk/brawn/assign(mob/living/L)
 	..()
 	holder.mob_bump_flag = HEAVY
 
@@ -71,16 +72,20 @@
 	desc = "A mar'qua's nervous system has long since adapted to the use of stimulants, chemicals, and different toxins. Unlike lesser races, you can handle a wide variety of chemicals before showing any side effects and you'll never become addicted."
 	icon_state = "adaptednervoussystem"
 
-/datum/perk/alien_nerves/assign(mob/living/carbon/human/H)
+/datum/perk/alien_nerves/assign(mob/living/L)
 	..()
-	holder.metabolism_effects.addiction_chance_multiplier = -1
-	holder.metabolism_effects.nsa_bonus += 300
-	holder.metabolism_effects.calculate_nsa()
+	if(ishuman(holder))
+		var/mob/living/carbon/human/H = holder
+		H.metabolism_effects.addiction_chance_multiplier = -1
+		H.metabolism_effects.nsa_bonus += 300
+		H.metabolism_effects.calculate_nsa()
 
 /datum/perk/alien_nerves/remove()
-	holder.metabolism_effects.addiction_chance_multiplier = 1
-	holder.metabolism_effects.nsa_bonus -= 300
-	holder.metabolism_effects.calculate_nsa()
+	if(ishuman(holder))
+		var/mob/living/carbon/human/H = holder
+		H.metabolism_effects.addiction_chance_multiplier = 1
+		H.metabolism_effects.nsa_bonus -= 300
+		H.metabolism_effects.calculate_nsa()
 	..()
 
 //////////////////////////////////////Human perks
@@ -98,7 +103,7 @@
 	if(world.time < cooldown_time)
 		to_chat(usr, SPAN_NOTICE("The human body can only take so much, you'll need more time before you've recovered enough to use this again."))
 		return FALSE
-	cooldown_time = world.time + 15 MINUTES
+	cooldown_time = world.time + 10 MINUTES
 	user.visible_message("[user] grits their teeth and begins breathing slowly.", "You grit your teeth and remind yourself you ain't got time to bleed!")
 	log_and_message_admins("used their [src] perk.")
 	user.reagents.add_reagent("adrenol", 5)
@@ -276,6 +281,7 @@
 /datum/perk/purgetoxins
 	name = "Purge Toxins"
 	desc = "You force your body to begin the process of removing toxins from your blood. All toxins, addictions, and stimulants are slowly purged while any toxin damage to your liver or body is healed but the effect leaves you exhausted."
+	icon_state = "purgetoxins"
 	active = FALSE
 	passivePerk = FALSE
 
@@ -295,6 +301,7 @@
 /datum/perk/purgeinfections
 	name = "Uncanny Resiliance"
 	desc = "Your body is adept not only at curing toxins and regulating its blood flow but also fighting off infections and disease in any form. All infections within you are slowly cured and diseases progression slowed if not outright cured, similar to as if you were injected with spaceacillin. Severe infections or late stage diseases may still need additional medical aid and this cannot restore necrotic tissue."
+	icon_state = "uncannyresiliance"
 	active = FALSE
 	passivePerk = FALSE
 
@@ -314,6 +321,7 @@
 /datum/perk/second_skin
 	name = "Second Skin"
 	desc = "Cindarites, be they bunker born or spacers, are used to wearing bulky enviromental suits. This life time of being acclimated to heavy clothing has become a second skin for many, allowing you to remove clothing instantly and never suffer slowdown from heavy armor."
+	icon_state = "secondskin"
 
 ///////////////////////////////////////////Opifex perks
 /datum/perk/opifex_backup
@@ -340,6 +348,7 @@
 /datum/perk/opifex_backup_medical
 	name = "Smuggled Medicine"
 	desc = "You retrieve your custom kitted medical webbing hidden on your person somewhere, along with the opifex-made black webbing vest that holds them. As every opifex is told, never go anywhere without your kit. This tool belt is yours alone and you should not allow any non-opifex to use it."
+	icon_state = "smuggledmedicine"
 	active = FALSE
 	passivePerk = FALSE
 
@@ -362,6 +371,7 @@
 /datum/perk/opifex_backup_combat
 	name = "Smuggled Armaments"
 	desc = "You retrieve your custom kitted combat belt hidden on your person somewhere, along with the opifex-made black webbing vest that holds them. As every opifex is told, never go anywhere without your kit. This tool belt is yours alone and you should not allow any non-opifex to use it, nor the weapons within."
+	icon_state = "smuggledarmaments"
 	active = FALSE
 	passivePerk = FALSE
 
@@ -428,7 +438,7 @@
 	in your biology and pheromones however make you an enemy to roaches. As a side effect of dealing with spiders so often, you can't be slowed or stuck by webbing."
 	icon_state = "muscular" // https://game-icons.net
 
-/datum/perk/spiderfriend/assign(mob/living/carbon/human/H)
+/datum/perk/spiderfriend/assign(mob/living/L)
 	..()
 	holder.faction = "spiders"
 
@@ -486,14 +496,14 @@
 	desc = "Unlike other caste in the cht'mant hive you are built for combat, while not as naturally tough as other species you can tank a few more blows than your softer insectile brethren."
 	icon_state = "paper"
 
-/datum/perk/chitinarmor/assign(mob/living/carbon/human/H)
+/datum/perk/chitinarmor/assign(mob/living/L)
 	..()
-	holder.brute_mod_perk -= 0.15 // Reduces total brute damage to +10% **taken** instead of +25%
+	holder.brute_mod_perk *= 0.80 // I need to know what type of stuff people were smoking before my change here
 	holder.mob_bomb_defense += 5
 	holder.falls_mod -= 0.2
 
 /datum/perk/chitinarmor/remove()
-	holder.brute_mod_perk += 0.15
+	holder.brute_mod_perk /= 0.80
 	holder.mob_bomb_defense -= 5
 	holder.falls_mod += 0.2
 	..()
@@ -501,11 +511,12 @@
 /datum/perk/scuttlebug
 	name = "Scuttlebug"
 	desc = "While your definitive purpose is not as clearly defined as other castes within the cht'mant hive your constant movement and labors have made you quite used to the hustle and bustle, letting you run faster than most races."
-	icon_state = "fast" // https://game-icons.net/1x1/delapouite/fast-forward-button.html
+	icon_state = "scuttlebug"
 
 /datum/perk/repair_goo
 	name = "Produce Repair Goo"
 	desc = "Fixing things is apart of your caste as it is scuttling around keeping yourself busy. As such you can vomit out glue-like goo that functions exceptionally well for tool and general repairs."
+	icon_state = "repairgoo"
 	active = FALSE
 	passivePerk = FALSE
 
@@ -566,7 +577,7 @@
 	desc = "As a Folken, you can use the light to heal wounds, standing in areas of bright light will increase your natural regeneration. Due to your comparitively young age, you heal much faster than older folken."
 	var/replaced = FALSE // Did it replace the normal folken healing?
 
-/datum/perk/folken_healing/young/assign(mob/living/carbon/human/H)
+/datum/perk/folken_healing/young/assign(mob/living/L)
 	..()
 	if(holder.stats.getPerk(PERK_FOLKEN_HEALING)) // Does the user has the folken healing perk?
 		holder.stats.removePerk(PERK_FOLKEN_HEALING) // Remove the old healing.
@@ -589,6 +600,7 @@
 	name = "Spawn Shroomling"
 	desc = "Shroomlings are animal-intelligence mycus capable of following simple orders like 'Shroomling 'Name' Follow.' and 'Shroomling 'Name' Stop.' who will stay by you when ordered. While capable of fighting, they are quite weak, the \
 	major benefit of having one is they may turn any food you feed into them into useful healing chemicals contained in bottles of resin."
+	icon_state = "spawnshroomling"
 	active = FALSE
 	passivePerk = FALSE
 	var/used = FALSE // Not deleting after use since the description is useful.
@@ -655,7 +667,8 @@
 	name = "Hypermytosis"
 	desc = "By expending an extraordinary amount of energy you can kick your natural regeneration into high-gear, regenerating limbs and improving healing. \
 	This process must be done slowly and carefuly to avoid the risk of DNA damage and thus slows you down and limits consciousness."
-	var/cooldown = 30 MINUTES
+	icon_state = "hypermytosis"
+	var/cooldown = 5 MINUTES
 	passivePerk = FALSE
 	var/nutrition_cost = 450
 
@@ -703,15 +716,18 @@
 /datum/perk/racial/slime_stat_boost/mental
 	name = "Malleable Mind"
 	desc = "Expend some of your spare calories to greatly improve your intellect."
+	icon_state = "malleablemind"
 	blorp = 1
 
 /datum/perk/racial/slime_stat_boost/physical
 	name = "Adaptive Anatomy"
 	desc = "Expend some of your spare calories to greatly improve your physical prowess."
+	icon_state = "adaptiveanatomy"
 
 /datum/perk/racial/speed_boost //Go fast but lose vig and burn through nutri
 	name = "Caloric Redline"
-	desc = "by burning through mass at an excessive rate an Aulvae can push their body to move with surprising swiftness, albeit losing some of the fine control over their movements. "
+	desc = "by burning through mass at an excessive rate an Aulvae can push their body to move with surprising swiftness, albeit losing some of the fine control over their movements."
+	icon_state = "caloricredline"
 	var/cooldown = 10 MINUTES
 	passivePerk = FALSE
 	var/nutrition_cost = 200
@@ -756,18 +772,27 @@
 	name = "Gelatinous Biology"
 	desc = "Your peculiar anatomy afford you a variety of benefits compared to most organics. Toxins will generally heal instead of hurt, whereas anti-toxins will hurt instead of heal.\
 	additionally you are somewhat resistant to NSA overload, and can slowly regenerate health so long as you have nutrition. "//This perk doesn't actually cause the slime-specific chem metabolism effects
+	icon_state = "gelatinousbiology"
 	passivePerk = TRUE
 	var/regen_rate = 0.3
 
+/datum/perk/racial/slime_metabolism/on_process()
+	. = ..()
+	if(regen_rate  && holder.nutrition > 300 && holder.stat != DEAD) //We lose regen when we are below half max nutrition. Or when we're dead.
+		holder.heal_overall_damage(regen_rate, regen_rate)
 
-/datum/perk/racial/slime_metabolism/assign(mob/living/carbon/human/H)
+/datum/perk/racial/slime_metabolism/assign(mob/living/L)
 	..()
 	holder.toxin_mod_perk -= 0.5
-	holder.metabolism_effects.nsa_bonus += 100
-	holder.metabolism_effects.calculate_nsa()
+	if(ishuman(holder))
+		var/mob/living/carbon/human/H = holder
+		H.metabolism_effects.nsa_bonus += 100
+		H.metabolism_effects.calculate_nsa()
 
 /datum/perk/racial/slime_metabolism/remove()
 	holder.toxin_mod_perk += 0.5
-	holder.metabolism_effects.nsa_bonus -= 100
-	holder.metabolism_effects.calculate_nsa()
+	if(ishuman(holder))
+		var/mob/living/carbon/human/H = holder
+		H.metabolism_effects.nsa_bonus -= 100
+		H.metabolism_effects.calculate_nsa()
 	..()

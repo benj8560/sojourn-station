@@ -6,7 +6,7 @@
 	gain_text = "You suddenly get a splitting headache before your vision blurs painfully. By the time its over, you feel like a whole new world of possibilities has opened for you."
 	icon_state = "psionic"
 
-/datum/perk/psion/assign(mob/living/carbon/human/H)
+/datum/perk/psion/assign(mob/living/L)
 	..()
 	holder.maxHealth -=20
 	holder.health -=20
@@ -20,6 +20,7 @@
 	name = "Psionic Psychosis"
 	desc = "You lived a life of unsettled violence. Maybe it was circumstance, maybe it was necessity, or maybe you just liked hurting people. No matter the reason, your mind is attuned to bloody \
 	violence and your potential as a psion reflects that. No matter your stats or physical body, you always deal maximum damage when using scaling psionic weaponry you create."
+	icon_state = "psionicpsychosis"
 
 /datum/perk/psi_harmony
 	name = "Psionic Harmony"
@@ -38,6 +39,7 @@
 	name = "Mind Master"
 	desc = "Your training as a Soteria psychologist and understanding of psychiatry has given you a deep understanding of how the mind works. As a result, if you became a psion, you have an \
 	expanded set of powers that aid you in your work, with additional essence to use your abilities."
+	icon_state = "mindmaster"
 
 /datum/perk/psi_grace
 	name = "Psionic Grace"
@@ -52,7 +54,7 @@
 	gain_text = "Everything falls into place, all things become clear. You feel stronger, more alert, quicker. You have not attained perfection but you feel you are closer than ever before \
 	and the last mental block you had has been removed, the flood gates of success filling your mind."
 
-/datum/perk/psi_peace_of_the_psion/assign(mob/living/carbon/human/H)
+/datum/perk/psi_peace_of_the_psion/assign(mob/living/L)
 	..()
 	holder.stats.changeStat(STAT_ROB, 10)
 	holder.stats.changeStat(STAT_TGH, 10)

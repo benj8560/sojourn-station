@@ -80,8 +80,8 @@
 #define WAIT_FINISH  4
 
 // Setting this much higher than 1024 could allow spammers to DOS the server easily.
-#define MAX_MESSAGE_LEN       3072
-#define MAX_PAPER_MESSAGE_LEN 4096
+#define MAX_MESSAGE_LEN       8192
+#define MAX_PAPER_MESSAGE_LEN 16384
 #define MAX_BOOK_MESSAGE_LEN  12288
 #define MAX_LNAME_LEN         64
 #define MAX_NAME_LEN          26
@@ -207,7 +207,6 @@
 //distance
 #define RANGE_ADJACENT -1
 
-//#define UNTIL(X) while(!(X)) stoplag() old one
 
 //Core implants
 #define CORE_ACTIVATED /datum/core_module/activatable
@@ -403,3 +402,29 @@
         }\
         A.flags &= ~OVERLAY_QUEUED;\
     } while (FALSE)
+
+#define LIST_COLOR_RENAME 				\
+	list(								\
+		"rebeccapurple" = "dark purple",\
+		"darkslategrey" = "dark grey",	\
+		"darkolivegreen"= "dark green",	\
+		"darkslateblue" = "dark blue",	\
+		"darkkhaki" 	= "khaki",		\
+		"darkseagreen" 	= "light green",\
+		"midnightblue" 	= "blue",		\
+		"lightgrey" 	= "light grey",	\
+		"darkgrey" 		= "dark grey",	\
+		"darkmagenta"	= "dark magenta",\
+		"steelblue" 	= "blue",		\
+		"goldenrod"	 	= "gold"		\
+	)
+
+/**
+ * stuff like `copytext(input, length(input))` will trim the last character of the input,
+ * because DM does it so it copies until the char BEFORE the `end` arg, so we need to bump `end` by 1 in these cases.
+ */
+#define PREVENT_CHARACTER_TRIM_LOSS(integer) (integer + 1)
+
+/// BYOND's string procs don't support being used on datum references (as in it doesn't look for a name for stringification)
+/// We just use this macro to ensure that we will only pass strings to this BYOND-level function without developers needing to really worry about it.
+#define LOWER_TEXT(thing) lowertext(UNLINT("[thing]"))

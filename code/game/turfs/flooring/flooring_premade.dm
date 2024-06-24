@@ -468,13 +468,8 @@
 /turf/simulated/floor/airless/lava
 /turf/simulated/floor/light
 
-/turf/simulated/floor/snow
-	name = "snow"
-	icon = 'icons/turf/floors.dmi'
-	icon_state = "snow"
 
 /turf/simulated/floor/beach/coastline
-/turf/simulated/floor/plating/snow
 /turf/simulated/floor/airless/ceiling
 
 /*Beach/Water*/
@@ -684,6 +679,26 @@
 	icon_state = "mud_light"
 	initial_flooring = /decl/flooring/dirt/mud/light
 
+/*Snow and Icewater*/
+
+/turf/simulated/floor/snow
+	name = "snow"
+	icon = 'icons/turf/flooring/snows.dmi'
+	icon_state = "snow0"
+	temperature = 253.15
+	oxygen = MOLES_O2STANDARD * 1.14 //the multiplier is to compensate the lower pressure, to keep it breathable
+	nitrogen = MOLES_N2STANDARD *1.14
+	initial_flooring = /decl/flooring/snow
+
+/turf/simulated/floor/icewater
+	name = "icewater"
+	icon = 'icons/turf/flooring/icewater.dmi'
+	icon_state = "ice_water0"
+	temperature = 253.15
+	oxygen = MOLES_O2STANDARD * 1.14 //the multiplier is to compensate the lower pressure, to keep it breathable
+	nitrogen = MOLES_N2STANDARD *1.14
+	initial_flooring = /decl/flooring/icewater
+
 /*Rock*/
 
 /turf/simulated/floor/rock
@@ -746,6 +761,17 @@
 	name = "gravel road"
 	icon_state = "road_1"
 	initial_flooring = /decl/flooring/rock/manmade/road
+
+/*Shale - ALL SPRITE CREDITS GO TO CM-SS13!*/
+
+/turf/simulated/floor/asteroid/shale
+	name = "coarse shale"
+	icon = 'icons/turf/flooring/dirt.dmi'
+	icon_state = "shale0"
+	initial_flooring = /decl/flooring/shale
+	oxygen = 0
+	nitrogen = 0
+	carbon_dioxide = 850
 
 /*POOL - new pool tile and the splash code to go with it*/
 /turf/simulated/floor/pool

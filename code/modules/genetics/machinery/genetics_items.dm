@@ -431,7 +431,7 @@ A holder for items we make with Genetics. Helps add a visceral element to object
 			for(var/loot_item in loot)
 				if(ispath(loot_item, /obj))
 					var/obj/instanced_item = new loot_item()
-					instanced_item.loc = src.loc
+					instanced_item.loc = get_turf(src)
 			qdel(src)
 		else
 			playsound(src.loc, 'sound/effects/splat.ogg', 50, 1)
@@ -611,7 +611,8 @@ Neglects to mention where to find its pieces.
 		"Flesh sacs can be achieved through irradiated human DNA- if you're a bad person.",
 		"Flesh sacs can be achieved through irradiated vatgrown DNA- if you're a morally ambiguous person.",
 		"Flesh sacs can be achieved through irradiated monkey DNA with only limited moral quandaries!",
-		"You can combine quite a few blood banks together to make a blood lake, and then lakes into bigger blood genes! How many times can you do it?",
+		"Bank to Bank, River to River, Ocean to Ocean, weaved together to make a Temple.",
+		"Eye's of a cat, belly of a beast and a bank of blood will make a most regal sickness.",
 		"If you combine the mutations that make roaches and spiders accept you, you can create a mutation that will cause them to ignore you."))
 	desc = "Xenogenetics fact of the day: [blurb]"
 

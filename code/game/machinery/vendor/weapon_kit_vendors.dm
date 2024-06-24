@@ -83,7 +83,6 @@
 					"Watchtower Kit" = /obj/item/storage/box/bs_kit/watchtower,
 					"Duty Kit" = /obj/item/storage/box/bs_kit/duty,
 					"Cog Kit" = /obj/item/storage/box/bs_kit/cog,
-					"Lascore kit" = /obj/item/storage/box/bs_kit/lascore,
 					"Ekaterina SMG Kit" = /obj/item/storage/box/bs_kit/ekaterina,
 					"Bounty Kit" = /obj/item/storage/box/bs_kit/bounty)
 	var/selection = items[input(redeemer, "Pick your primary weapon", "Blackshield Voucher Redemption") as null|anything in items]
@@ -293,6 +292,7 @@
 	var/items = list(
 					"Counselor Kit" = /obj/item/storage/box/m_kit/taser,
 					"Liberty Kit" = /obj/item/storage/box/m_kit/liberty,
+					"Mistral Kit" = /obj/item/storage/box/m_kit/mistral,
 					"Judiciary Kit" = /obj/item/storage/box/m_kit/judiciary)
 	var/selection = items[input(redeemer, "Pick your side-arm", "Marshal Voucher Redemption") as null|anything in items]
 	if(selection)

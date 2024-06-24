@@ -113,6 +113,11 @@ var/list/_client_preferences_by_type
 	key = "CHAT_GHOSTEARS"
 	options = list(GLOB.PREF_ALL_SPEECH, GLOB.PREF_NEARBY)
 
+/datum/client_preference/ghost_ears_plus
+	description ="Ghost Psionics/Cruciform"
+	key = "CHAT_GHOST_EARS_PLUS"
+	options = list(GLOB.PREF_YES, GLOB.PREF_NO)
+
 /datum/client_preference/ghost_sight
 	description ="Ghost sight"
 	key = "CHAT_GHOSTSIGHT"
@@ -142,10 +147,6 @@ var/list/_client_preferences_by_type
 	description ="Typing indicator"
 	key = "SHOW_TYPING"
 	options = list(GLOB.PREF_SHOW, GLOB.PREF_HIDE)
-
-/datum/client_preference/show_typing_indicator/changed(var/mob/preference_mob, var/new_value)
-	if(new_value == GLOB.PREF_HIDE)
-		QDEL_NULL(preference_mob.typing_indicator)
 
 /datum/client_preference/show_ooc
 	description ="OOC chat"
@@ -235,7 +236,7 @@ var/list/_client_preferences_by_type
 /datum/client_preference/tgui_fancy/changed(mob/preference_mob, new_value)
 	for (var/datum/tgui/tgui as anything in preference_mob?.tgui_open_uis)
 		// Force it to reload either way
-		tgui.update_static_data(preference_mob)
+		tgui.send_full_update()
 
 /datum/client_preference/tgui_lock
 	description ="TGUI Lock"
@@ -244,7 +245,46 @@ var/list/_client_preferences_by_type
 /datum/client_preference/tgui_lock/changed(mob/preference_mob, new_value)
 	for (var/datum/tgui/tgui as anything in preference_mob?.tgui_open_uis)
 		// Force it to reload either way
-		tgui.update_static_data(preference_mob)
+		tgui.send_full_update()
+
+/datum/client_preference/tgui_toaster
+	description ="TGUI Performance Mode (Disables images/etc)"
+	key = "tgui_toaster"
+	default_value = GLOB.PREF_NO
+
+/datum/client_preference/tgui_toaster/changed(mob/preference_mob, new_value)
+	for (var/datum/tgui/tgui as anything in preference_mob?.tgui_open_uis)
+		// Force it to reload either way
+		tgui.send_full_update()
+
+
+/datum/client_preference/tgui_input
+	description = "TGUI Input: Use TGUI for basic input boxes"
+	key = "tgui_input"
+	default_value = GLOB.PREF_YES
+
+/datum/client_preference/tgui_input_large
+	description = "TGUI Input: Use Larger Buttons"
+	key = "tgui_input_large"
+	default_value = GLOB.PREF_NO
+
+/datum/client_preference/tgui_input_swapped
+	description = "TGUI Input: Swap Submit/Cancel buttons"
+	key = "tgui_input_swapped"
+	default_value = GLOB.PREF_NO
+
+/datum/client_preference/tgui_say
+	description = "TGUI Say: Use TGUI For Say Input"
+	key = "tgui_say"
+	default_value = GLOB.PREF_YES
+
+/datum/client_preference/tgui_say_light_mode
+	description = "TGUI Say: Use Light Mode"
+	key = "tgui_say_light_mode"
+	default_value = GLOB.PREF_NO
+
+/datum/client_preference/tgui_say_light_mode/changed(mob/preference_mob, new_value)
+	preference_mob?.client?.tgui_say?.load()
 
 /********************
 * General Staff Preferences *

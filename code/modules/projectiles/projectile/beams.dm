@@ -55,28 +55,61 @@ In pvp they also have more lasting damages, such as infections, pain form burns,
 	armor_penetration = 15 //Some AP
 	recoil = 2
 
+// Laser bullets are your premium and expensive upgrade to your traditional bullets.
+// The basic design philosophy here is that they possess the AP of HV and the damge of FMJ all while having half the recoil.
+// Keep in mind that laser bullets do not imbed and leave no shrapnel behind, which is stupidly lethal as of date.
+
+
+// 223 is a middle ground between 408 and 75. Damage of 408, AP of 75
+/obj/item/projectile/beam/laser_223
+	damage_types = list(BURN = 20)
+	armor_penetration = 20
+	recoil = 5
+	wounding_mult = WOUNDING_SERIOUS
+/*
+/obj/item/projectile/beam/laser_223/ap
+	damage_types = list(BURN = 16)
+	armor_penetration = 36
+	recoil = 7
+	wounding_mult = WOUNDING_NORMAL
+	penetrating = 1
+
+/obj/item/projectile/beam/laser_223/lethal
+	damage_types = list(BURN = 27)
+	armor_penetration = 15
+	recoil = 5
+	wounding_mult = WOUNDING_WIDE
+*/
+
 /obj/item/projectile/beam/weak/pistol_35
-	damage_types = list(BURN = 12)
-	recoil = 1
+	damage_types = list(BURN = 15)
+	armor_penetration = 20
+	recoil = 2.5
 
 /obj/item/projectile/beam/weak/light_rifle_257
-	damage_types = list(BURN = 13)
+	damage_types = list(BURN = 14)
+	armor_penetration = 30
+	recoil = 3.5
 
 /obj/item/projectile/beam/weak/rifle_75
-	damage_types = list(BURN = 22)
-	recoil = 4
+	damage_types = list(BURN = 15.5)
+	armor_penetration = 36
+	recoil = 5
 
 /obj/item/projectile/beam/weak/heavy_rifle_408
-	damage_types = list(BURN = 16)
-	recoil = 3
+	damage_types = list(BURN = 20)
+	armor_penetration = 46
+	recoil = 10
 
 /obj/item/projectile/beam/weak/magnum_40
-	damage_types = list(BURN = 20)
-	recoil = 3
+	damage_types = list(BURN = 19)
+	armor_penetration = 33
+	recoil = 4.5
 
 /obj/item/projectile/beam/weak/kurtz_50
-	damage_types = list(BURN = 40)
-	recoil = 5
+	damage_types = list(BURN = 23.5)
+	armor_penetration = 35
+	recoil = 8
 
 /obj/item/projectile/beam/weak/smg
 	damage_types = list(BURN = 10)
@@ -192,6 +225,48 @@ In pvp they also have more lasting damages, such as infections, pain form burns,
 			H.apply_effect(20,IRRADIATE)//woop woop ass blast USA woop woop
 	else
 		return 1
+
+/obj/item/projectile/beam/IRKdissolver //Marking this for future use with IRK
+	name = "dissolver ray"
+	icon_state = "emitter"
+	damage_types = list(BURN = 30) //Less burn but also less recoil
+	armor_penetration = 40 //Experimental and extremely rare but also self recharging so take it as you will
+	recoil = 5 //Less recoil but also less burn
+
+	muzzle_type = /obj/effect/projectile/emitter/muzzle
+	tracer_type = /obj/effect/projectile/emitter/tracer
+	impact_type = /obj/effect/projectile/emitter/impact
+
+/obj/item/projectile/beam/IRKdissolver/on_impact(atom/target)
+	var/mob/living/M = target
+	var/mob/living/carbon/human/H = M
+	if(ishuman(target))
+		if(istype(target, /mob/living/carbon/))
+			H.apply_effect(35,IRRADIATE)//Irradiates more
+	else
+		return 1
+
+/obj/item/projectile/beam/IRKdesolator //Marking this for future use with IRK
+	name = "desolator ray"
+	icon_state = "xray"
+	damage_types = list(BURN = 20) //Worse Xray
+	armor_penetration = 25
+	eyeblur = 4
+	recoil = 6
+	penetrating = 1
+	
+	muzzle_type = /obj/effect/projectile/xray/muzzle
+	tracer_type = /obj/effect/projectile/xray/tracer
+	impact_type = /obj/effect/projectile/xray/impact
+		
+/obj/item/projectile/beam/IRKdesolator/on_impact(atom/target)
+	var/mob/living/M = target
+	var/mob/living/carbon/human/H = M
+	if(ishuman(target))
+		if(istype(target, /mob/living/carbon/))
+			H.apply_effect(15,IRRADIATE)//Irradiates less but pierces walls
+	else
+		return 1			
 
 /obj/item/projectile/beam/sniper
 	name = "sniper beam"

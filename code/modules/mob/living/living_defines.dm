@@ -116,7 +116,7 @@
 	var/mod_climb_delay = 1 // delay for climb
 	var/noise_coeff = 1 //noise coefficient
 	var/brute_mod_perk = 1 //this and the ones below adjust various damages via perks
-	var/burn_mod_perk = 1
+	var/burn_mod_perk = 1 //Please make any and all adjustments multiplicative only for all damage mods
 	var/toxin_mod_perk = 1
 	var/oxy_mod_perk = 1
 
@@ -139,3 +139,6 @@
 	var/on_fire = 0 //The "Are we on fire?" var
 	var/fire_stacks
 	var/next_onfire_brn = 0 //burn
+
+	/// Icon used for speechbubbles
+	var/bubble_icon = "default"
