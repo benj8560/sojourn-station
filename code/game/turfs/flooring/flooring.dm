@@ -67,8 +67,7 @@ var/list/flooring_types
 
 	//How we smooth with other flooring
 	var/floor_smooth = SMOOTH_ALL
-	var/list/flooring_whitelist = list() //Smooth with nothing except the contents of this list
-	var/list/flooring_blacklist = list() //Smooth with everything except the contents of this list
+	var/list/flooring_whitelist = null //Smooth with nothing except the contents of this list
 
 	//How we smooth with walls
 	var/wall_smooth = SMOOTH_NONE
@@ -106,8 +105,11 @@ var/list/flooring_types
 
 	*/
 	var/smooth_movable_atom = SMOOTH_NONE
-	var/list/movable_atom_whitelist = list()
-	var/list/movable_atom_blacklist = list()
+	var/list/movable_atom_whitelist = null
+	var/list/movable_atom_blacklist = null
+
+	//Slowdown when on the tile, not moving TO the tile! Set to negitives to be a speed boost (i.e roads)
+	var/tally_addition_decl = 0
 
 //Flooring Procs
 /decl/flooring/proc/get_plating_type(var/turf/location)
@@ -193,7 +195,6 @@ var/list/flooring_types
 	health = 100
 	has_base_range = 18
 	floor_smooth = SMOOTH_BLACKLIST
-	flooring_blacklist = list(/decl/flooring/reinforced/plating/under,/decl/flooring/reinforced/plating/hull) //Smooth with everything except the contents of this list
 	smooth_movable_atom = SMOOTH_GREYLIST
 	movable_atom_blacklist = list(
 		list(/obj, list("density" = TRUE, "anchored" = TRUE), 1)
@@ -238,7 +239,7 @@ var/list/flooring_types
 		return TRUE
 	return FALSE
 
-/decl/flooring/reinforced/plating/under/attackby(var/obj/item/I, var/mob/user, var/turf/T)
+/decl/flooring/reinforced/plating/under/attackby(var/obj/item/I, var/mob/user, var/turf/simulated/T)
 	if (istype(I, /obj/item/stack/rods))
 		.=TRUE
 		var/obj/item/stack/rods/R = I
@@ -251,6 +252,23 @@ var/list/flooring_types
 				T.alpha = 0
 				var/obj/structure/catwalk/CT = new /obj/structure/catwalk(T)
 				T.contents += CT
+	if (istype(I, /obj/item/cement_bag))
+		var/obj/item/cement_bag/CB = I
+		if(CB.inuse)
+			to_chat(user, SPAN_NOTICE("You cant poor the [src] that fast!"))
+			return
+		if(!T.wet)
+			to_chat(user, SPAN_NOTICE("The floor needs to be wet before pooring [src]!"))
+			return
+		CB.inuse = TRUE
+		to_chat(user, SPAN_NOTICE("You start pooring and smoothing the [src]..."))
+		if(do_after(user,60))
+			new /obj/effect/flooring_type_spawner/concrete(T)
+			qdel(CB)
+		else
+			to_chat(user, SPAN_NOTICE("You must stand still to finish the job!"))
+			CB.inuse = FALSE
+
 
 /decl/flooring/reinforced/plating/under/get_plating_type(var/turf/location)
 	if (turf_is_lower_hull(location)) //Hull plating is only on the lowest level of the ship
@@ -782,10 +800,12 @@ var/list/flooring_types
 	icon_base = "sandwater"
 
 /decl/flooring/beach/water
+	name = "water"
 	icon = 'icons/turf/flooring/beach.dmi'
 	icon_base = "water"
 	resistance = RESISTANCE_TOUGH
 	health = 9999999
+	tally_addition_decl = 0.1 //Walking in water makes ya slower
 
 /decl/flooring/beach/water/coastwater
 	icon = 'icons/turf/flooring/beach.dmi'
@@ -796,16 +816,19 @@ var/list/flooring_types
 	icon_base = "beachcorner"
 
 /decl/flooring/beach/water/swamp
+	name = "merky water"
 	icon = 'icons/turf/flooring/beach.dmi'
 	icon_base = "seashallow_swamp"
 	footstep_sound = "water"
 
 /decl/flooring/beach/water/jungle
+	name = "merky water"
 	icon = 'icons/turf/flooring/beach.dmi'
 	icon_base = "seashallow_jungle1"
 	footstep_sound = "water"
 
 /decl/flooring/beach/water/flooded
+	name = "merky water"
 	icon = 'icons/turf/flooring/beach.dmi'
 	icon_base = "seashallow_jungle2"
 	footstep_sound = "water"
@@ -814,18 +837,22 @@ var/list/flooring_types
 	icon = 'icons/turf/flooring/beach.dmi'
 	icon_base = "seashallow_frozen"
 	footstep_sound = "water"
+	tally_addition_decl = -0.1 //Walking on ice makes ya faster
 
 /decl/flooring/beach/water/ocean
+	name = "salt water"
 	icon = 'icons/turf/flooring/beach.dmi'
 	icon_base = "seadeep"
 	footstep_sound = "water"
 
 /decl/flooring/beach/water/jungledeep
+	name = "merky water"
 	icon = 'icons/turf/flooring/beach.dmi'
 	icon_base = "seashallow_jungle3"
 	footstep_sound = "water"
 
 /decl/flooring/beach/water/shallow
+	name = "shallow water"
 	icon = 'icons/turf/flooring/beach.dmi'
 	icon_base = "seashallow"
 	footstep_sound = "water"
@@ -932,6 +959,7 @@ var/list/flooring_types
 	space_smooth = SMOOTH_NONE
 	resistance = RESISTANCE_TOUGH
 	health = 9999999
+	tally_addition_decl = -0.1 //walking on ice makes ya go faster
 
 /*Dirt*/
 /decl/flooring/dirt
@@ -975,9 +1003,11 @@ var/list/flooring_types
 
 /decl/flooring/dirt/mud
 	icon_base = "mud_dark"
+	tally_addition_decl = 0.1
 
 /decl/flooring/dirt/mud/light
 	icon_base = "mud_light"
+	tally_addition_decl = 0.1
 
 /*Rock*/
 /decl/flooring/rock
@@ -1014,13 +1044,19 @@ var/list/flooring_types
 	icon_base = "seafloor"
 
 /decl/flooring/rock/manmade/concrete
+	name = "concrete"
 	icon_base = "concrete6"
+	tally_addition_decl = -0.1
 
 /decl/flooring/rock/manmade/asphalt
+	name = "asphalt"
 	icon_base = "asphalt"
+	tally_addition_decl = -0.1
 
 /decl/flooring/rock/manmade/road
+	name = "road"
 	icon_base = "road_1"
+	tally_addition_decl = -0.1
 
 /*POOL - basic pool tile details*/
 /decl/flooring/pool

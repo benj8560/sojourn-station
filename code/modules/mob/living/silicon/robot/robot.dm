@@ -555,7 +555,7 @@
 			var/mob/living/carbon/human/firer = Proj.firer
 			chance -= firer.stats.getStat(STAT_VIG, FALSE) / 5
 		var/obj/item/projectile/bullet/B = Proj
-		chance = max((chance - B.armor_penetration), 0)
+		chance = max((chance / B.armor_divisor), 0)
 		if (!(Proj.testing))
 			if(B.starting && prob(chance)) // disregard this for test because its luck based
 				visible_message(SPAN_DANGER("\The [Proj.name] ricochets off [src]\'s armour!"))
@@ -883,12 +883,12 @@
 	return ..(user,FLOOR(damage * 0.5, 1),attack_message)
 
 /mob/living/silicon/robot/proc/allowed(atom/movable/A)
-	if(!length(req_access)) //no requirements
+	if(!LAZYLEN(req_access)) //no requirements
 		return TRUE
 
 	var/list/access = A?.GetAccess()
 
-	if(!length(access)) //no ID or no access
+	if(!LAZYLEN(access)) //no ID or no access
 		return FALSE
 	for(var/req in req_access)
 		if(req in access) //have one of the required accesses
@@ -896,15 +896,15 @@
 	return FALSE
 
 /mob/living/silicon/robot/updateicon()
-	overlays.Cut()
+	cut_overlays()
 	if(stat == CONSCIOUS && !actively_resting)
-		overlays += "eyes-[module_sprites[icontype]]"
+		add_overlay("eyes-[module_sprites[icontype]]")
 
 	if(stat == DEAD && has_wreck_sprite)
 		icon_state = "[module_sprites[icontype]]-wreck"
 
 	if(lights_on && !actively_resting)
-		overlays += "[module_sprites[icontype]]_l"
+		add_overlay("[module_sprites[icontype]]_l")
 
 	if(allow_resting && stat == CONSCIOUS)
 		if(actively_resting && !opened)
@@ -915,14 +915,14 @@
 	if(opened)
 		var/panelprefix = custom_sprite ? ckey : "ov"
 		if(wiresexposed)
-			overlays += "[panelprefix]-openpanel +w"
+			add_overlay("[panelprefix]-openpanel +w")
 		else if(cell)
-			overlays += "[panelprefix]-openpanel +c"
+			add_overlay("[panelprefix]-openpanel +c")
 		else
-			overlays += "[panelprefix]-openpanel -c"
+			add_overlay("[panelprefix]-openpanel -c")
 
 	if(module_active && istype(module_active,/obj/item/borg/combat/shield))
-		overlays += "[module_sprites[icontype]]-shield"
+		add_overlay("[module_sprites[icontype]]-shield")
 
 	if(modtype == "Combat")
 		if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
