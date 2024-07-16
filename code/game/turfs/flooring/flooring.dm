@@ -291,13 +291,13 @@ var/list/flooring_types
 	//BSTs need this or they generate tons of soundspam while flying through the ship
 	if(!ishuman(M)|| M.incorporeal_move || !has_gravity(get_turf(M)))
 		return
-	var/mob/living/carbon/human/our_trippah = M
+	var/mob/living/our_trippah = M
 	if(MOVING_QUICKLY(M))
 		if(M.stats.getPerk(PERK_SURE_STEP))
 			return
 		var/task_level = our_trippah.learnt_tasks.get_task_mastery_level("SLIP_N_DIE")
  // The art of calculating the vectors required to avoid tripping on the metal beams requires big quantities of brain power
-		if(prob(50 - (our_trippah.stats.getStat(STAT_COG)) + task_level)) //50 cog makes you unable to trip, or if you trip alot
+		if(prob(50 - ((our_trippah.stats.getStat(STAT_COG)) + task_level))) //50 cog makes you unable to trip, or if you trip alot
 			if(!our_trippah.back)
 				return
 			our_trippah.learnt_tasks.attempt_add_task_mastery(/datum/task_master/task/slip_n_die, "SLIP_N_DIE", skill_gained = 1, learner = our_trippah)
