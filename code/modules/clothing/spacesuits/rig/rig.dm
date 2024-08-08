@@ -21,7 +21,7 @@
 	req_access = null
 	w_class = ITEM_SIZE_BULKY
 	item_flags = DRAG_AND_DROP_UNEQUIP|EQUIP_SOUNDS
-	price_tag = 600
+	price_tag = 1500
 
 	// These values are passed on to all component pieces.
 	armor = list(
@@ -42,7 +42,7 @@
 	obscuration = LIGHT_OBSCURATION
 	var/ablative_armor = 0
 	var/ablative_max = 0
-	var/ablation = ABLATION_STANDARD
+	var/ablation = ABLATION_SOFT
 	tool_qualities = list(QUALITY_ARMOR = 100)
 	max_upgrades = 1
 	blacklist_upgrades = list(
@@ -169,7 +169,7 @@
 				to_chat(usr, "The armor system reports critical failure! Repairs mandatory.")
 			if(0.5 to 0.8)
 				to_chat(usr, "The armor system reports heavy damage. Repairs required.")
-			if(0.8 to 1)
+			if(0.8 to 0.99)
 				to_chat(usr, "The armor system reports insignificant damage. Repairs advised.")
 
 /obj/item/rig/Initialize()
@@ -283,6 +283,7 @@
 
 /obj/item/rig/proc/toggle_seals(mob/initiator,instant)
 
+	updateArmor()
 	if(sealing) return
 
 	// Seal toggling can be initiated by the suit AI, too
@@ -629,6 +630,7 @@
 			check_slot = wearer.wear_suit
 
 	if(use_obj)
+		use_obj.refresh_upgrades()
 		if(check_slot == use_obj && deploy_mode != ONLY_DEPLOY)
 			if (active && !(use_obj.retract_while_active))
 				to_chat(wearer, SPAN_DANGER("The [use_obj] is locked in place while [src] is active. You must deactivate it first!"))
@@ -721,6 +723,9 @@
 
 	for(var/piece in list("helmet","gauntlets","chest","boots"))
 		toggle_piece(piece, H, ONLY_DEPLOY)
+
+
+	updateArmor()
 
 /obj/item/rig/dropped(mob/user)
 	..()
