@@ -101,6 +101,7 @@
 	name = "Sablekyne"
 	name_plural = "Sablekynes"
 	default_form = FORM_SABLEKYNE
+	reagent_tag = IS_TAJ
 	obligate_form = TRUE
 	unarmed_types = list(/datum/unarmed_attack/claws/strong, /datum/unarmed_attack/punch, /datum/unarmed_attack/stomp,  /datum/unarmed_attack/kick, /datum/unarmed_attack/bite/strong, /datum/unarmed_attack/horns)
 	darksight = 8
@@ -817,7 +818,6 @@
 	injury_type =  INJURY_TYPE_UNLIVING
 	hunger_factor = 0
 	flags = NO_BREATHE | NO_PAIN | NO_BLOOD | NO_SCAN | NO_POISON | NO_MINOR_CUT
-	slowdown = 0.3
 	radiation_mod = 0
 	total_health = 75
 	breath_type = null
