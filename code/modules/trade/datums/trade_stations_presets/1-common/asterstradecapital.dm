@@ -6,6 +6,9 @@
 		list(24, 26),
 		list(30, 30)
 	)
+
+	icon_states = list("capital", "station")
+
 	uid = "asterstradecapital"
 	tree_x = 0.58
 	tree_y = 0.9
@@ -36,6 +39,15 @@
 			/obj/item/tool/tape_roll,
 			/obj/item/device/geiger,
 			/obj/item/device/toner
+		),
+		"Storage Utilities" = list(
+			/obj/item/storage/hcases/ammo,
+			/obj/item/storage/hcases/parts,
+			/obj/item/storage/hcases/med,
+			/obj/item/storage/hcases/engi,
+			/obj/item/storage/bag/produce,
+			/obj/item/storage/bag/sheetsnatcher,
+			/obj/item/storage/bag/chemistry
 		),
 		"Lonestar Cells" = list(
 			/obj/item/cell/small,
@@ -82,7 +94,9 @@
 			/obj/item/toy/figure/character/bobblehead/red_soldier,
 			/obj/item/toy/figure/character/bobblehead/metacat,
 			/obj/item/toy/figure/character/bobblehead/shitcurity,
-			/obj/item/toy/figure/character/bobblehead/metro_patrolman
+			/obj/item/toy/figure/character/bobblehead/metro_patrolman,
+			/obj/item/gun/projectile/revolver/capgun,
+			/obj/item/storage/box/blanks
 		),
 		"Holland and Sullivan Sidearms & Ammunition" = list(
 			/obj/item/clothing/accessory/holster,
@@ -102,7 +116,7 @@
 			/obj/item/ammo_magazine/ammobox/pistol_35/rubber
 		),
 		"Solnishko 'Guns-from-Home' Parts" = list(
-			/obj/item/computer_hardware/hard_drive/portable/design/gun_parts/bootleg = good_data("Solnishko Distrubtion - Homemade Parts", list(1, 1), 600),
+			/obj/item/pc_part/drive/disk/design/gun_parts/bootleg = good_data("Solnishko Distrubtion - Homemade Parts", list(1, 1), 600),
 			/obj/item/part/gun/grip/wood,
 			/obj/item/part/gun/mechanism/pistol,
 			/obj/item/part/gun/mechanism/revolver,
@@ -185,7 +199,7 @@
 
 	offer_types = list(
 		/obj/item/tool/knife = offer_data("spare knifes", 30, 20),
-		/obj/item/reagent_containers/food/snacks/grown = offer_data("spare grown food", 10, 120), //10 credits a grown item basicl
+		/obj/item/reagent_containers/snacks/grown = offer_data("spare grown food", 10, 120), //10 credits a grown item basicl
 		/datum/reagent/organic/nutriment/honey = offer_data("Honey bottle (60u)", 800, 1),
 		/obj/item/organ/external/robotic/one_star = offer_data("grayson external prosthetic", 1800, 4),
 		/obj/item/toy/consumer/product/toaster = offer_data("toolbox toaster", 250, 4)

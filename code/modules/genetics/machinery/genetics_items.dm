@@ -12,7 +12,7 @@ This is a bugtesting item, please forgive the memes.
 	var/datum/genetics/genetics_holder/held_mutations
 
 /obj/item/device/scanner/gene_debug_scanner/is_valid_scan_target(atom/target)
-	if(!istype(target, /mob/living) && !istype(target, /obj/item/reagent_containers/food/snacks/meat))
+	if(!istype(target, /mob/living) && !istype(target, /obj/item/reagent_containers/snacks/meat))
 		to_chat(usr, SPAN_WARNING("A red dot blips, the scan target [target] is invalid."))
 		return FALSE
 	return TRUE
@@ -27,8 +27,8 @@ This is a bugtesting item, please forgive the memes.
 		if(istype(target, /mob/living))
 			var/mob/living/living_target = target
 			held_mutations.initializeFromMob(living_target)
-		else if (istype(target, /obj/item/reagent_containers/food/snacks/meat))
-			var/obj/item/reagent_containers/food/snacks/meat/meat_target = target
+		else if (istype(target, /obj/item/reagent_containers/snacks/meat))
+			var/obj/item/reagent_containers/snacks/meat/meat_target = target
 			held_mutations.initializeFromMeat(meat_target)
 		scan_title = "Blue-Ink Scanner - [target]"
 		scan_data = soteria_scan(held_mutations)
@@ -149,7 +149,7 @@ A more player-friendly version of the Blue-Ink scanner, reports basic informatio
 	var/datum/genetics/genetics_holder/held_mutations
 
 /obj/item/device/scanner/petite_scanner/is_valid_scan_target(atom/target)
-	if(!istype(target, /mob/living) && !istype(target, /obj/item/reagent_containers/food/snacks/meat))
+	if(!istype(target, /mob/living) && !istype(target, /obj/item/reagent_containers/snacks/meat))
 		to_chat(usr, SPAN_WARNING("A red dot blips, the scan target [target] is invalid."))
 		return FALSE
 	return TRUE
@@ -186,8 +186,8 @@ A more player-friendly version of the Blue-Ink scanner, reports basic informatio
 	if(istype(target, /mob/living))
 		var/mob/living/living_target = target
 		held_mutations = living_target.unnatural_mutations.Copy()
-	else if (istype(target, /obj/item/reagent_containers/food/snacks/meat))
-		var/obj/item/reagent_containers/food/snacks/meat/meat_target = target
+	else if (istype(target, /obj/item/reagent_containers/snacks/meat))
+		var/obj/item/reagent_containers/snacks/meat/meat_target = target
 		held_mutations.initializeFromMeat(meat_target)
 	scan_title = "Mutagenic Data - [target]"
 	scan_data = petite_scan()
@@ -505,7 +505,7 @@ Circuit boards for different Genetics Machines.
 		/obj/item/stock_parts/matter_bin = 4, //Affects Max Sample plates
 	)
 
-/obj/item/computer_hardware/hard_drive/portable/design/genetics_kit
+/obj/item/pc_part/drive/disk/design/genetics_kit
 	disk_name = "Genetics Studio Design Kit"
 	desc = "A disc containing patented designs for the Xenogenetics lab. Contains additional licensed products from the lab's creator."
 	icon = 'icons/obj/genetics/genetics_disks.dmi'
@@ -520,7 +520,7 @@ Circuit boards for different Genetics Machines.
 		/datum/design/autolathe/genetics/petite_scanner = 1
 	)
 
-/obj/item/computer_hardware/hard_drive/portable/design/genetics_kit_public
+/obj/item/pc_part/drive/disk/design/genetics_kit_public
 	disk_name = "Genetics Studio Resupply Kit"
 	desc = "A disc containing quality-of-life designs for the Xenogenetics lab."
 	icon = 'icons/obj/genetics/genetics_disks.dmi'
@@ -603,7 +603,12 @@ Neglects to mention where to find its pieces.
 		"The Hyperion mutation can enhance cloned organs, like the Blood Vessels.",
 		"The Hyperion mutation can enhance cloned organs, like the Nerves.",
 		"The Hyperion mutation can enhance cloned organs, like the Muscles.",
-		"Mixed with a cloking mutation, the Hyperion mutation can be combined to cause phasing.",
+		"Hell Divers are just a really hungry and leathery opossum if you don't think too much about it!",
+		"The flesh sacs with protein milk can lead to heavier hands.",
+		"Baldness and coughing when combined can lead to protective coating for genes.",
+		"DNA Mending and Epilepsy can create another layer of DNA protection.",
+		"DNA Mending and Nervousness can create another layer of DNA protection.",
+		"Mixed with a cloaking mutation, the Hyperion mutation can be combined to cause phasing.",
 		"A greater cloaking mutation can be irradiated to cause phasing.",
 		"The DNA of a golden roach can be combined with an imbecile mutation to make a mutagen that enforces docility.",
 		"The barotrauma mutation can be irradiated to make a strain that removes a need for breathing.",
@@ -612,7 +617,8 @@ Neglects to mention where to find its pieces.
 		"Flesh sacs can be achieved through irradiated vatgrown DNA- if you're a morally ambiguous person.",
 		"Flesh sacs can be achieved through irradiated monkey DNA with only limited moral quandaries!",
 		"Bank to Bank, River to River, Ocean to Ocean, weaved together to make a Temple.",
-		"Eye's of a cat, belly of a beast and a bank of blood will make a most regal sickness.",
+		"Mix Unstable foot, Eye's of a cat and dwarfism to create something any miner would love.",
+		"Belly of a beast, a bank of blood, and eye's of a cat will make a most regal sickness.",
 		"If you combine the mutations that make roaches and spiders accept you, you can create a mutation that will cause them to ignore you."))
 	desc = "Xenogenetics fact of the day: [blurb]"
 

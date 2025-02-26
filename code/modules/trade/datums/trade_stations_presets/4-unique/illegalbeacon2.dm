@@ -3,6 +3,7 @@
 		"NSTB 'Introversion'" = "Nefarious-Space Trade Beacon 'Introversion'. The trade beacon is sending an automated message. \"Uplink established. Welcome, agent.\""
 	)
 	uid = "illegal2"
+	icon_states = list("oberth_destroyer", "object")
 	tree_x = 0.62
 	tree_y = 0.3
 	start_discovered = FALSE
@@ -47,8 +48,8 @@
 			/obj/item/rig_module/fabricator/energy_net
 		),
 		"Software" = list(
-			/obj/item/computer_hardware/hard_drive/portable/advanced/shady = good_data("old data disk", list(1, 1), 900),
-			/obj/item/computer_hardware/hard_drive/portable/design/guns/china = good_data("China Lake Disk", list(1, 1), 1100)
+			/obj/item/pc_part/drive/disk/adv/shady = good_data("old data disk", list(1, 1), 900),
+			/obj/item/pc_part/drive/disk/design/guns/china = good_data("China Lake Disk", list(1, 1), 1100)
 		),
 		"Grenade Shells" = list(
 			/obj/item/ammo_casing/grenade = good_data("Baton Shell", list(4, 8), 100),
